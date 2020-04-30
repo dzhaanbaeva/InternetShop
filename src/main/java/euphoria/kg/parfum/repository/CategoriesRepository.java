@@ -1,0 +1,8 @@
+package euphoria.kg.parfum.repository;
+
+
+import euphoria.kg.parfum.model.Categories;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CategoriesRepository extends JpaRepository<Categories, Integer> {
+}
