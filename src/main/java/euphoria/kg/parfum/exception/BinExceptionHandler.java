@@ -16,7 +16,6 @@ public class BinExceptionHandler {
     @ExceptionHandler(BindException.class)
     private ResponseEntity<Object> handleBindExceptionResponseEntity(BindException ex){
         var bindingResult = ex.getBindingResult();
-
         var apiFieldErrors = bindingResult
                 .getFieldErrors()
                 .stream()

@@ -27,6 +27,7 @@ public class MainController {
             model.addAttribute("products", productsService.getProducts());
             return "index";
         }
+
         @RequestMapping("/jql/{name}")
         public String getMainPageJql(Model model, @PathVariable("name") String name) {
             model.addAttribute("products", productsService.getProductsName(name));
