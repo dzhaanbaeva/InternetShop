@@ -1,20 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Lesson 65. JPA & ORM</title>
-</head>
-<body>
-<h1>New products</h1>
+<#import "partials/main.ftlh" as main />
 
-<ul>
-    <#list products as p>
-        <img src="/images/${p.image}" width="150" height="150">
-    <li>
-        <p>${p.id} - ${p.name} </p>
-    </li>
-</#list>
-</ul>
+<@main.renderWith>
 
-</body>
-</html>
+<h1>Our products</h1>
+
+    <form>
+        Search:
+        <input type="search" name="name" id="searchForm" placeholder="search" aria-controls="example">
+        <button type="button" class="" id="searchId">Search</button>
+    </form>
+
+<div class="images">
+        <#list items as p>
+        <div class="flex flex-column flex-v-center box-128">
+            <a href="/page/${p.id}">
+            <img src="/images/${p.image}" width="150" height="150">
+            <p>${p.id} - ${p.name} </p>
+            </a>
+        </div>
+    </#list>
+
+</div>
+<#include "partials/pagination.ftlh">
+
+</@main.renderWith>

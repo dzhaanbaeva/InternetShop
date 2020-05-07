@@ -2,7 +2,6 @@ package euphoria.kg.parfum.controller;
 
 import euphoria.kg.parfum.dto.CustomerRegistrationForm;
 import lombok.AllArgsConstructor;
-import lombok.var;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
