@@ -1,26 +1,21 @@
+<#-- импортируем основной шаблон-контейнер который содержит в себе разметку для основной структуры страницы -->
 <#import "partials/main.ftlh" as main />
 
+<#-- обрабатываем его, и передаём ему список скриптов, которые необходимо подключить-->
 <@main.renderWith>
 
-<h1>Our products</h1>
+    <div class="flex flex-justify-content-center">
+        <a class="flex box-128" href="/register"> Регистрация </a>
+        <a class="flex box-128" href="/login"> Войти </a>
+        <a class="flex box-128" href="/main"> Главная </a>
 
-    <form>
-        Search:
-        <input type="search" name="name" id="searchForm" placeholder="search" aria-controls="example">
-        <button type="button" class="" id="searchId">Search</button>
-    </form>
+        <form class="flex box-128" action="/logout" method="post">
+            <#if _csrf??>
+                <input type="hidden" name="${(_csrf.parameterName)!'csrf'}" value="${(_csrf.token)!'--no-token--'}"/>
+            </#if>
+            <button class="flex box-128 logout-button">Выйти </button>
+        </form>
 
-<div class="images">
-        <#list items as p>
-        <div class="flex flex-column flex-v-center box-128">
-            <a href="/page/${p.id}">
-            <img src="/images/${p.image}" width="150" height="150">
-            <p>${p.id} - ${p.name} </p>
-            </a>
-        </div>
-    </#list>
-
-</div>
-<#include "partials/pagination.ftlh">
+    </div>
 
 </@main.renderWith>

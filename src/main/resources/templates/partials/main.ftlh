@@ -39,6 +39,7 @@
 
     <#list scripts as scriptSource>
         <script src="${scriptSource}"></script>
+<#--        <script src="/js/main.js"></script>-->
     </#list>
 
     </body>
