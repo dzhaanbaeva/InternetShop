@@ -1,6 +1,7 @@
 package euphoria.kg.parfum.controller;
 
 import euphoria.kg.parfum.dto.CustomerRegistrationForm;
+import euphoria.kg.parfum.service.CustomerService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -12,12 +13,26 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 
+
+import java.security.Principal;
+
 import static java.util.stream.Collectors.toList;
 
 @Controller
 @RequestMapping
 @AllArgsConstructor
 public class CustomerController {
+
+    private final CustomerService customerService;
+
+    @GetMapping("/profile")
+    public String pageCustomerProfile(Model model, Principal principal)
+    {
+        var user = customerService.getByEmail(principal.getName());
+        model.addAttribute("dto", user);
+        return "profile";
+    }
+
 
     @GetMapping("/register")
     public String pageRegistrationCustomer(Model model) {
@@ -27,7 +42,7 @@ public class CustomerController {
 
         return "register";
     }
-
+//
     @GetMapping("/test")
     @ResponseBody
     public  String getTestPage(@Valid CustomerRegistrationForm form){
@@ -35,19 +50,26 @@ public class CustomerController {
     }
 
     @PostMapping("/register")
-    public String RegistrationPage(@Valid CustomerRegistrationForm form,
-                                   BindingResult validationResult,
-                                   RedirectAttributes attributes) {
-        attributes.addFlashAttribute("form", form);
+    public String registerPage(@Valid CustomerRegistrationForm customerRequestDto,
+                               BindingResult validationResult,
+                               RedirectAttributes attributes) {
+        attributes.addFlashAttribute("dto", customerRequestDto);
 
-
-        if(validationResult.hasFieldErrors()){
+        if (validationResult.hasFieldErrors()) {
             attributes.addFlashAttribute("errors", validationResult.getFieldErrors());
             return "redirect:/register";
         }
 
-        return "redirect:/";
+        customerService.register(customerRequestDto);
+        return "redirect:/login";
     }
+
+    @GetMapping("/login")
+    public String loginPage(@RequestParam(required = false, defaultValue = "false") Boolean error, Model model) {
+        model.addAttribute("error", error);
+        return "login";
+    }
+
 
     @ExceptionHandler(BindException.class)
     private ResponseEntity<Object> handleBindExceptionResponseEntity(BindException ex){

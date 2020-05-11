@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProductsService {
     @Autowired
@@ -23,8 +25,11 @@ public class ProductsService {
         return repo.findAll();
     }
 
-    public Iterable<Products> getProductsName(String name) {
-        return repo.getByName(name);
+    public List<Products> selectProductsByName(String name) {
+        return repo.getAllByNameLike(name);
+    }
+    public List<Products> selectProductsByDescription(String description) {
+        return repo.getAllByDescriptionLike(description);
     }
 
     public Page<ProductsDTO> getProducts(Pageable pageable) {
@@ -40,4 +45,6 @@ public class ProductsService {
         return repo.findAllById(id, pageable)
                 .map(ProductsDTO::from);
     }
+
+
 }

@@ -3,7 +3,6 @@ package euphoria.kg.parfum.dto;
 import euphoria.kg.parfum.model.Customer;
 import lombok.*;
 
-import java.util.UUID;
 
 @Data
 @Builder(access = AccessLevel.PRIVATE)
@@ -16,7 +15,6 @@ public class CustomerDTO {
         return builder()
                 .id(customer.getId())
                 .email(customer.getEmail())
-                .password(customer.getPassword())
                 .name(customer.getName())
                 .build();
     }
@@ -24,7 +22,6 @@ public class CustomerDTO {
 
     private int id;
     public String email;
-    public String password;
     public String name;
 
 }

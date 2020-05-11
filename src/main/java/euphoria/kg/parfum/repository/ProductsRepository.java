@@ -14,4 +14,10 @@ public interface ProductsRepository extends JpaRepository<Products, Integer> {
     public List<Products> getByName(String name);
 
     Page<Products> findAllById(int Id, Pageable pageable);
+
+//    @Query("select p from Products as p where p.name and p.description like  CONCAT(:name, description, '%,%')")
+    public List<Products> getAllByNameLike(String name);
+    public List<Products> getAllByDescriptionLike(String description);
+
+
 }
