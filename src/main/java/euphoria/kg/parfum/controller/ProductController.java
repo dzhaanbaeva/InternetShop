@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -48,13 +49,13 @@ public class ProductController {
     }
 
 
-    @RequestMapping("/")
+    @RequestMapping("/main")
         public String getMainPage(Model model, Pageable pageable, HttpServletRequest uriBuilder) {
         var product = productsService.getProducts(pageable);
         var uri = uriBuilder.getRequestURI();
         constructPageable(product, propertiesService.getDefaultPageSize(), model, uri);
             model.addAttribute("products", productsService.getProducts());
-            return "index";
+            return "general";
         }
 
     @GetMapping("/page/{id:\\d+?}")
@@ -68,11 +69,22 @@ public class ProductController {
     }
 
 
-    @RequestMapping("/product/{name}")
-        public String getMainPageJql(Model model, @PathVariable("name") String name) {
-        model.addAttribute("items", productsService.getProductsName(name));
-            return "page";
-        }
+//    @RequestMapping("/product/{name}")
+//        public String getMainPageJql(Model model, @PathVariable("name") String name) {
+//        model.addAttribute("items", productsService.selectProducts(name));
+//            return "page";
+//        }
+
+    @RequestMapping("/product/name")
+    public String selectProducts(Model model, @RequestParam("name") String name,
+                                             @RequestParam("description") String description
+                                          ){
+        model.addAttribute("items", productsService.selectProductsByName(name));
+        model.addAttribute("items", productsService.selectProductsByDescription(description));
+        model.addAttribute("items", productsService.selectProductsByName(name));
+        model.addAttribute("items", productsService.selectProductsByName(name));
+        return "page";
+    };
 
         @ExceptionHandler(ResourceNotFoundException.class)
         @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
