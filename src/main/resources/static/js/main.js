@@ -1,25 +1,29 @@
-'use strict';
-
-const serverPath = 'http://localhost:9292';
 
 window.addEventListener('load', function () {
-    let button = document.getElementById("searchId");
+// const serverPath = 'http://localhost:9292';
 
+
+    let button = document.getElementById("searchId");
     button.addEventListener("click", function (e) {
         e.preventDefault();
-        let searchForm = document.getElementById("searchForm");
+        let searchForm = document.getElementById("login-form");
         let data = new FormData(searchForm);
-        console.log(data)
-        fetch("http://localhost:9292/product/" + data, {
+        data.get(name);
+        const dataJSON = JSON.stringify(Object.fromEntries(data));
+
+        console.log(dataJSON)
+        fetch("http://localhost:9292/product" + dataJSON , {
             method: "GET"
-        }).then(res => res.json()).then(data => {
-            console.log(data)
+        }).then(response => {
+            console.log(response.data,"++++++++++++++++=")
+        })
+
             // window.location.href = "http://localhost:9292/product/" + data
-        });
+
 
     });
-});
 
+});
 
 const getCurrentPage = () => {
     const loc = (typeof window.location !== 'string') ? window.location.search : window.location;
@@ -82,12 +86,13 @@ const constructGetUrl = (url, queryParams) => {
             window.scrollTo(0, document.body.scrollHeight);
         };
     };
-    document.getElementById('loadPrev').hidden = true;
-    const loadNextElement = document.getElementById('loadNext');
-    if (loadNextElement !== null) {
-        loadNextElement.innerText = "Load more places";
-        loadNextElement.addEventListener('click', loadNextPlacesGenerator(loadNextElement, getCurrentPage()), {once: true});
-    }
+    // document.getElementById('loadPrev').hidden = true;
+    // const loadNextElement = document.getElementById('loadNext');
+    // if (loadNextElement !== null) {
+    //     loadNextElement.innerText = "Load more places";
+    //     loadNextElement.addEventListener('click', loadNextPlacesGenerator(loadNextElement, getCurrentPage()), {once: true});
+    // }
 
 })();
+
 
