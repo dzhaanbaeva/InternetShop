@@ -1,9 +1,14 @@
 package euphoria.kg.parfum.controller;
 
 import euphoria.kg.parfum.dto.CustomerRegistrationForm;
+import euphoria.kg.parfum.model.Customer;
+import euphoria.kg.parfum.model.PasswordResetToken;
+import euphoria.kg.parfum.repository.CustomerRepository;
+import euphoria.kg.parfum.repository.ResetRepository;
 import euphoria.kg.parfum.service.CustomerService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindException;
@@ -15,6 +20,7 @@ import javax.validation.Valid;
 
 
 import java.security.Principal;
+import java.util.UUID;
 
 import static java.util.stream.Collectors.toList;
 
@@ -24,6 +30,8 @@ import static java.util.stream.Collectors.toList;
 public class CustomerController {
 
     private final CustomerService customerService;
+    private final CustomerRepository repository;
+    private final ResetRepository resetRepo;
 
     @GetMapping("/profile")
     public String pageCustomerProfile(Model model, Principal principal)
@@ -63,6 +71,57 @@ public class CustomerController {
         customerService.register(customerRequestDto);
         return "redirect:/login";
     }
+
+    @GetMapping("/forgot-password")
+    public String pageForgotPassword(Model model) {
+        return "forgot";
+    }
+
+
+    @PostMapping("/forgot-password")
+    public String submitForgotPasswordPage(@RequestParam("email") String email,
+                                           RedirectAttributes attributes) {
+
+        if (!repository.existsByEmail(email)) {
+            attributes.addFlashAttribute("errorText", "Entered email does not exist!");
+            return "redirect:/";
+        }
+
+        PasswordResetToken pToken = PasswordResetToken.builder()
+                .customer(repository.findByEmail(email).get())
+                .token(UUID.randomUUID().toString())
+                .build();
+
+        resetRepo.deleteAll();
+        resetRepo.save(pToken);
+
+        return "redirect:/forgot-success";
+    }
+
+    @GetMapping("/forgot-success")
+    public String pageResetPassword(Model model) {
+        return "forgot-success";
+    }
+
+    @PostMapping("/reset-password")
+    public String submitResetPasswordPage(@RequestParam("token") String token,
+                                          @RequestParam("newPassword") String newPassword,
+                                          RedirectAttributes attributes) {
+
+        if (!resetRepo.existsByToken(token)) {
+            attributes.addFlashAttribute("errorText", "Entered email does not exist!");
+            return "redirect:/reset-password";
+        }
+
+        PasswordResetToken pToken = resetRepo.findByToken(token).get();
+        Customer customer = repository.findById(pToken.getCustomer().getId()).get();
+        customer.setPassword(new BCryptPasswordEncoder().encode(newPassword));
+
+        repository.save(customer);
+
+        return "redirect:/login";
+    }
+
 
     @GetMapping("/login")
     public String loginPage(@RequestParam(required = false, defaultValue = "false") Boolean error, Model model) {
