@@ -28,6 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.formLogin()
                 .loginPage("/login")
+                .successForwardUrl("/main")
                 .failureUrl("/login?error=true");
 
         http.logout()
@@ -43,6 +44,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .anyRequest()
                 .permitAll();
+
+        http.csrf().ignoringAntMatchers("/cart/add");
     }
 
     @Override

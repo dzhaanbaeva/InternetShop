@@ -20,4 +20,8 @@ public interface ProductsRepository extends JpaRepository<Products, Integer> {
     public List<Products> getAllByDescriptionLike(String description);
 
 
+    Products getProductsById(int parseInt);
+
+    @Query("from Products as p where p.id = :id")
+    Products findProductById(Integer id);
 }
