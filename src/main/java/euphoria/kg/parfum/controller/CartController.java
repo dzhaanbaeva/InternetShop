@@ -58,6 +58,20 @@ public class CartController {
 
     }
 
+//    @PostMapping("/cart/add")
+//    public Products addCart(@RequestParam(value = "id", required = false) Integer id, HttpSession session){
+//        var product = productsRepository.findProductById(id);
+//        Cart cart = cartRepo.findBasketBySession(session.getId());
+//        if(cartDataRepository.findCartsDataByProductAndCarts(product,cart)==null){
+//            CartsData cartProduct = new CartsData(product, cart,1);
+//            cartDataRepository.save(cartProduct);
+//        } else {
+//            CartsData cartProduct = cartDataRepository.findCartsDataByProductAndCarts(product, cart);
+//            cartDataRepository.delete(cartProduct);
+//        }
+//        return product;
+//    }
+
 
 
     @PostMapping("/cart/empty")
