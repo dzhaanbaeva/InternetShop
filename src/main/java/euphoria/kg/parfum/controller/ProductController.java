@@ -1,7 +1,7 @@
 package euphoria.kg.parfum.controller;
 
 import euphoria.kg.parfum.exception.ResourceNotFoundException;
-import euphoria.kg.parfum.model.Products;
+import euphoria.kg.parfum.service.CartService;
 import euphoria.kg.parfum.service.ProductsService;
 import euphoria.kg.parfum.service.PropertiesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,22 +11,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class ProductController {
 
-        @Autowired
-        private final ProductsService productsService;
-       private final PropertiesService propertiesService;
+    @Autowired
+    private final ProductsService productsService;
+    private final PropertiesService propertiesService;
+    private final CartService cartService;
 
 
-
-    public ProductController(ProductsService productsService, PropertiesService propertiesService) {
+    public ProductController(ProductsService productsService, PropertiesService propertiesService, CartService cartService) {
         this.productsService = productsService;
         this.propertiesService = propertiesService;
+        this.cartService = cartService;
     }
 
     private static <T> void constructPageable(Page<T> list, int pageSize, Model model, String uri) {
@@ -50,13 +50,13 @@ public class ProductController {
 
 
     @RequestMapping("/main")
-        public String getMainPage(Model model, Pageable pageable, HttpServletRequest uriBuilder) {
+    public String getMainPage(Model model, Pageable pageable, HttpServletRequest uriBuilder) {
         var product = productsService.getProducts(pageable);
         var uri = uriBuilder.getRequestURI();
         constructPageable(product, propertiesService.getDefaultPageSize(), model, uri);
-            model.addAttribute("products", productsService.getProducts());
-            return "general";
-        }
+        model.addAttribute("products", productsService.getProducts());
+        return "general";
+    }
 
     @GetMapping("/page/{id:\\d+?}")
     public String placePage(@PathVariable int id, Model model, Pageable pageable, HttpServletRequest uriBuilder) {
@@ -68,6 +68,13 @@ public class ProductController {
         return "page";
     }
 
+//    @PostMapping("/page/add")
+//    @ResponseStatus(HttpStatus.SEE_OTHER)
+//    public String handleAddProduct(@RequestParam(defaultValue = "--no-value--") String productId) {
+//        System.out.println(productId + "+=+++++++++++++++++++++++++++++++++++++=");
+////        cartService.addProduct(productId);
+//        return "redirect:/page/";
+//    }
 
 //    @RequestMapping("/product/{name}")
 //        public String getMainPageJql(Model model, @PathVariable("name") String name) {
@@ -75,26 +82,26 @@ public class ProductController {
 //            return "page";
 //        }
 
-    @RequestMapping("/product/name")
-    public String selectProducts(Model model, @RequestParam("name") String name,
-                                             @RequestParam("description") String description
-                                          ){
-        model.addAttribute("items", productsService.selectProductsByName(name));
-        model.addAttribute("items", productsService.selectProductsByDescription(description));
-        model.addAttribute("items", productsService.selectProductsByName(name));
-        model.addAttribute("items", productsService.selectProductsByName(name));
-        return "page";
-    };
+//    @RequestMapping("/product/name")
+////    public String selectProducts(Model model, @RequestParam("name") String name,
+////                                             @RequestParam("description") String description
+////                                          ){
+////        model.addAttribute("items", productsService.selectProductsByName(name));
+////        model.addAttribute("items", productsService.selectProductsByDescription(description));
+////        model.addAttribute("items", productsService.selectProductsByName(name));
+////        model.addAttribute("items", productsService.selectProductsByName(name));
+////        return "page";
+////    };
 
-        @ExceptionHandler(ResourceNotFoundException.class)
-        @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    @ExceptionHandler(ResourceNotFoundException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
 
-        private  String handlRNF(ResourceNotFoundException ex, Model model){
+    private String handlRNF(ResourceNotFoundException ex, Model model) {
         model.addAttribute("resource", ex.getResource());
         model.addAttribute("name", ex.getId());
 
-            return "resource not found";
-        }
-
-
+        return "resource not found";
     }
+
+
+}
