@@ -2,9 +2,12 @@
  объявляем макро-функцию используя которую мы создадим шаблон страницы
  https://freemarker.apache.org/docs/dgui_misc_userdefdir.html
  -->
-<#macro renderWith title="Welcome to EduFood! Your one stop shop to purchase food!" scripts=[] styles=[]>
+<#import "/spring.ftl" as spring>
+<#--<#macro render dir="ltr">-->
+<#macro renderWith title="Welcome to EduFood! Your one stop shop to purchase food!" scripts=[] styles=[] dir="ltr">
     <!doctype html>
-    <html lang="en">
+<html lang="${.locale}" dir="${dir}">
+<#--    <html lang="en">-->
     <head>
         <meta charset="UTF-8">
         <meta name="viewport"
@@ -19,7 +22,25 @@
         </#list>
     </head>
     <body>
-
+    <div class="backgrounder-icon">
+       <div class="container">
+         <div>
+            <form action="" method="get">
+                <label for="lang_select">
+                    <@spring.message "label.language" />:
+                </label>
+                <select name="lang" id="lang_select">
+                    <option value="">Default</option>
+                    <option value="" disabled>----------</option>
+                    <option value="en-GB">British English</option>
+                    <option value="en-US">American English</option>
+                    <option value="ru-RU">Русский</option>
+                </select>
+                <button type="submit">
+                    <@spring.message "button.language-change.text" />
+                </button>
+            </form>
+        </div>
     <#--
     например если бы у нашего сайта было какое-то верхнее меню,
     то мы могли бы его тут указать
@@ -34,7 +55,7 @@
          которое передаётся как тело макро-функции при её вызове
         -->
         <#nested>
-
+        <p>текущая локаль: ${.locale}</p>
     </div>
 
     <#list scripts as scriptSource>
@@ -42,7 +63,8 @@
 <#--        <script src="/js/main.js"></script>-->
     </#list>
 
-
+    </div>
+    </div>
     </body>
     </html>
 
