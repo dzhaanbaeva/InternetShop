@@ -3,6 +3,7 @@ package euphoria.kg.parfum.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Optional;
 
 @Data
 @Table(name = "carts_data")
@@ -13,21 +14,27 @@ import javax.persistence.*;
 public class CartsData {
 
     @Id
-    Integer id;
-
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    Products product;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+     private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "carts_id")
-    Cart carts;
+    private Cart carts;
 
-    Integer qty = 1;
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Products product;
 
-    public CartsData(Products product, Cart carts, Integer qty) {
-        this.product = product;
+
+
+    private Integer qty = 1;
+
+    public CartsData(Cart carts,Products product,  Integer qty) {
         this.carts = carts;
+        this.product = product;
         this.qty = qty;
+    }
+
+    public CartsData(Cart cart, Optional<Products> product, int qty) {
     }
 }

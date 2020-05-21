@@ -101,3 +101,10 @@ ul {
 li {
     padding-left: 15px;
 }
+.nameBrand{
+    text-align: center;
+    font-size: 3em;
+    color: lightseagreen;
+    font-style: oblique;
+}
+

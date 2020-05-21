@@ -51,11 +51,11 @@ public class CustomerController {
         return "register";
     }
 //
-    @GetMapping("/test")
-    @ResponseBody
-    public  String getTestPage(@Valid CustomerRegistrationForm form){
-        return form.getEmail();
-    }
+//    @GetMapping("/test")
+//    @ResponseBody
+//    public  String getTestPage(@Valid CustomerRegistrationForm form){
+//        return form.getEmail();
+//    }
 
     @PostMapping("/register")
     public String registerPage(@Valid CustomerRegistrationForm customerRequestDto,

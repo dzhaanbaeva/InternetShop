@@ -28,17 +28,14 @@ public class Cart {
     @OneToMany(mappedBy = "carts")
     List<CartsData> cartData;
 
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
-    @NotNull
-    @Positive
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
 
 
-    public Cart(Customer customer, String session) {
-        this.customer = customer;
-        this.session = session;
-    }
+//    public Cart(String session) {
+//        this.session = session;
+//    }
 
     public List<CartsData> getProducts() {
         return new ArrayList<>();

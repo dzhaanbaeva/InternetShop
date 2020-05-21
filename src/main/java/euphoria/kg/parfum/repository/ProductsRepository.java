@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductsRepository extends JpaRepository<Products, Integer> {
     @Query("select p from Products as p where p.name like CONCAT(:name, '%')")
@@ -23,5 +24,6 @@ public interface ProductsRepository extends JpaRepository<Products, Integer> {
     Products getProductsById(int parseInt);
 
     @Query("from Products as p where p.id = :id")
-    Products findProductById(Integer id);
+    Products findProductsById(Integer id);
+//    Products findById(Integer id);
 }
