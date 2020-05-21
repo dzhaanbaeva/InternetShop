@@ -1,13 +1,14 @@
+<#import "/spring.ftl" as spring>
 <#import "partials/main.ftlh" as main />
 
 <@main.renderWith>
 
-<h1>Our products</h1>
+<h1><@spring.message "Our-products"/></h1>
 
     <form id="login-form" name="form" action="/product/name" method="post">
-        Search:
+        <@spring.message "Search"/>:
         <input type="text" name="text" id="searchForm" placeholder="search" aria-controls="example">
-        <button type="button" class="" id="searchId">Search</button>
+        <button type="button" class="" id="searchId"><@spring.message "Search"/></button>
     </form>
 
 <div class="images">

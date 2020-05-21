@@ -1,34 +1,24 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+<#import "/spring.ftl" as spring>
+<#import "partials/main.ftlh" as main />
 
-    <title>Storing data in session</title>
-
-    <link rel="stylesheet" href="/css/main.css">
-</head>
-<body>
+<@main.renderWith>
 
 <div class="container">
-    <h1>Ваша корзина</h1>
+    <h1><@spring.message "Your-cart"/></h1>
         <#if cartItems??>
         <#list cartItems as item>
             <p>${item}</p>
         </#list>
         <form action="/cart/empty" method="post">
-            <button>Очистить корзину</button>
+            <button><@spring.message "Clean the cart"/></button>
         </form>
     <#else>
-        <p>тут ничего нет!</p>
+        <p><@spring.message "There's-nothing"/></p>
     </#if>
 
     <div>
-        <a href="/">назад</a>
+        <a href="/"><@spring.message "back"/></a>
     </div>
 </div>
 
-</body>
-</html>
+</@main.renderWith>
